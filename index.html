@@ -1,11 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Campusly</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap">
+<title>Eventra</title>
+<meta name="theme-color" content="#3347ff">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap">
 <style>
 :root{--bg:#fff;--ink:#15171c;--mute:#6b7080;--line:#e7e8ec;--acc:#3347ff;--accbg:#eef0ff;--ok:#12805c;--okbg:#e6f6f0;--warn:#a85f00;--warnbg:#fff3df;--err:#c4322f;--errbg:#fdeceb;--card:#fff;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
@@ -106,18 +106,129 @@ nav button.on{color:var(--acc)}
 .link{border:0;background:none;color:var(--acc);cursor:pointer;padding:0;font-weight:600}
 #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;z-index:9}
 #toast.show{opacity:1}
+
+/* ===== Design layer v2 ===== */
+:root{--bg:#f3f4fa;--on:#fff;--sh:0 1px 2px rgba(20,24,60,.06),0 8px 24px -8px rgba(20,24,60,.12);--shl:0 2px 4px rgba(20,24,60,.06),0 18px 40px -12px rgba(51,71,255,.28);--glass:rgba(255,255,255,.78);--dsp:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0d13;--on:#0b0d18;--sh:0 1px 2px rgba(0,0,0,.4),0 10px 28px -10px rgba(0,0,0,.6);--shl:0 2px 4px rgba(0,0,0,.4),0 18px 40px -12px rgba(135,147,255,.3);--glass:rgba(21,24,32,.78);--card:#14171f;--line:#232734}}
+:root[data-theme="dark"]{--bg:#0b0d13;--on:#0b0d18;--sh:0 1px 2px rgba(0,0,0,.4),0 10px 28px -10px rgba(0,0,0,.6);--shl:0 2px 4px rgba(0,0,0,.4),0 18px 40px -12px rgba(135,147,255,.3);--glass:rgba(21,24,32,.78);--card:#14171f;--line:#232734}
+body{background:var(--bg);font-size:15.5px;line-height:1.5}
+h1,h2,.logo,.stats b,.date b,.poster b,.ticket .top h3,.ev h3,#splash .mark{font-family:var(--dsp)}
+h1{font-size:32px;font-weight:700;letter-spacing:-.035em;line-height:1.08;margin:6px 0 16px}
+h2{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:26px 0 12px}
+.wrap{padding-bottom:160px}
+header{position:sticky;top:0;z-index:6;margin:0 -18px;padding:14px 18px 12px;background:var(--glass);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px)}
+.logo{font-weight:800;font-size:25px;letter-spacing:-.045em}
+.logo i{background:linear-gradient(135deg,var(--acc),#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+#who .tag{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;color:var(--ink)}
+#who .btn{min-height:34px;padding:5px 12px;font-size:13px}
+.btn{border-radius:14px;min-height:46px;padding:10px 20px;box-shadow:0 6px 16px -6px color-mix(in srgb,var(--acc) 65%,transparent);color:var(--on);transition:transform .12s,box-shadow .2s,filter .2s}
+.btn:active,.chip:active,.card:active,.next:active{transform:scale(.97)}
+.btn.ghost{background:var(--accbg);color:var(--acc);box-shadow:none}
+.btn.line{background:var(--card);border:1px solid var(--line);color:var(--ink);box-shadow:none}
+@media(hover:hover){.btn:hover{filter:brightness(1.08)}.card:hover{transform:translateY(-3px);box-shadow:var(--shl)}}
+.in{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;transition:border-color .15s,box-shadow .15s}
+.in:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 20%,transparent)}
+input[type=search].in{padding-left:40px;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%239298a8' stroke-width='2' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E") no-repeat 13px 50%}
+label{font-weight:500;margin:14px 0 6px}
+.seg{background:color-mix(in srgb,var(--mute) 14%,transparent);border-radius:14px;padding:4px}
+.seg button{border-radius:11px;padding:8px 12px;font-weight:600;transition:background .2s,color .2s}
+.seg button.on{box-shadow:var(--sh)}
+.chips{scrollbar-width:none;margin:0 -18px;padding:10px 18px 6px}.chips::-webkit-scrollbar{display:none}
+.chip{background:var(--card);border-radius:12px;padding:6px 15px;font-weight:500;transition:background .15s,color .15s,transform .12s}
+.chip.on{background:var(--acc);color:var(--on);border-color:var(--acc);box-shadow:0 6px 14px -6px color-mix(in srgb,var(--acc) 70%,transparent)}
+.chips[style*="flex-wrap"]{margin:0;padding:0}
+.poster{position:relative;overflow:hidden;isolation:isolate;border-radius:22px;padding:14px 16px}
+.poster:before{content:"";position:absolute;inset:auto -30px -60px auto;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.16);z-index:-1}
+.poster:after{content:"";position:absolute;inset:-50px auto auto -40px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.1);z-index:-1}
+.poster span{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;font-size:22px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.poster b{font-size:21px;font-weight:700;letter-spacing:-.03em;line-height:1.1;text-shadow:0 1px 12px rgba(0,0,0,.18)}
+.card{border:0;border-radius:24px;box-shadow:var(--sh);margin-bottom:18px;transition:transform .2s,box-shadow .2s}
+.card .poster{border-radius:0}.card .bd{padding:14px 16px 16px}
+.card .btn.line{min-height:38px;padding:6px 14px;font-size:13.5px}
+.next{position:relative;overflow:hidden;border-radius:26px;padding:20px;background:linear-gradient(135deg,#2a3bf0,#6d4bff 60%,#a06bff);box-shadow:var(--shl);transition:transform .12s}
+.next:before{content:"";position:absolute;right:-50px;top:-50px;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.14)}
+.next>*{position:relative}
+.next div:first-child{font-weight:600;letter-spacing:.01em}
+.next div[style*="20px"]{font-family:var(--dsp);font-size:25px!important;line-height:1.1;margin:6px 0!important}
+.next div:last-child{display:inline-block;background:rgba(255,255,255,.2);padding:7px 14px;border-radius:99px;font-size:13.5px}
+.ticket{border:0;border-radius:28px;box-shadow:var(--shl)}
+.ticket .top{padding:22px 22px 20px;background:linear-gradient(160deg,var(--accbg),var(--card) 70%)}
+.ticket .top h3{font-size:24px;font-weight:700;letter-spacing:-.03em}
+.ticket .bot{background:var(--card);border-top:2px dashed var(--line)}
+.ticket .bot:before,.ticket .bot:after{background:var(--bg);border:0}
+.qr{border-radius:18px;padding:12px;box-shadow:0 0 0 1px var(--line)}
+.code{font-size:16px;letter-spacing:.14em}
+.pill{padding:3px 11px;font-size:12.5px}
+.note{border-radius:16px;padding:12px 14px;line-height:1.45;background:var(--accbg);color:var(--ink)}
+.note b{color:var(--acc)}
+.g{padding:14px 0}
+.empty{padding:48px 20px;border:1.5px dashed var(--line);border-radius:22px;margin:8px 0;line-height:1.5}
+.stats b{font-size:36px;font-weight:700}
+.bar{height:8px;border-radius:99px}.bar i{border-radius:99px;background:linear-gradient(90deg,var(--acc),#a06bff)}
+.res{border-radius:18px;padding:18px}
+.idbox{border-radius:18px;padding:22px;font-size:26px}
+.auth{background:var(--card);border-radius:28px;padding:26px 22px;box-shadow:var(--shl);margin-top:18px}
+.auth h1{font-size:30px}
+.mg{padding:14px 0}
+.link{padding:6px 2px;min-height:36px}
+nav{left:0;right:0;margin:0 auto;bottom:calc(10px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);max-width:616px;padding:6px;border:1px solid var(--line);border-radius:26px;background:var(--glass);-webkit-backdrop-filter:saturate(1.6) blur(16px);backdrop-filter:saturate(1.6) blur(16px);box-shadow:var(--shl);gap:4px;justify-content:space-between}
+nav button{flex:1;border-radius:20px;min-width:0;padding:7px 6px;font-weight:600;font-size:11.5px;transition:background .2s,color .2s}
+nav button.on{background:var(--accbg);color:var(--acc)}
+nav button svg{transition:transform .2s}nav button.on svg{transform:translateY(-1px) scale(1.08)}
+.actbar{left:0;right:0;margin:0 auto;width:calc(100% - 24px);max-width:616px;bottom:calc(92px + env(safe-area-inset-bottom,0px));border:1px solid var(--line);border-radius:22px;padding:10px;background:var(--glass);-webkit-backdrop-filter:saturate(1.6) blur(16px);backdrop-filter:saturate(1.6) blur(16px);box-shadow:var(--shl)}
+.actbar .in2{max-width:none}
+dialog{border:0;border-radius:26px;box-shadow:0 30px 80px -20px rgba(10,12,40,.5);padding:22px}
+dialog[open]{animation:dlg .28s cubic-bezier(.2,.8,.2,1)}
+dialog::backdrop{background:rgba(10,12,30,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#odlg{overflow:hidden}#odlg .poster{border-radius:20px;margin-bottom:6px}
+@keyframes dlg{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+#toast{border-radius:16px;padding:12px 18px;font-weight:500;box-shadow:var(--shl);transform:translate(-50%,12px);transition:opacity .25s,transform .25s;bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+#toast.show{transform:translate(-50%,0)}
+#splash{background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--acc) 22%,var(--bg)),var(--bg) 62%)}
+#splash .mark{font-size:56px;font-weight:800;letter-spacing:-.05em}
+#splash .mark i{background:linear-gradient(135deg,var(--acc),#a06bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+#splash .sub{font-size:15px;letter-spacing:.01em}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(min-width:700px){.wrap{max-width:680px}}
+
+/* Guest landing */
+.hero p{color:var(--mute);margin:0;max-width:36ch}
+.gc{cursor:default}
+.veil{filter:blur(7px) saturate(.9);opacity:.8;pointer-events:none;-webkit-user-select:none;user-select:none}
+.gate{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:680px;z-index:7;padding:22px 20px calc(18px + env(safe-area-inset-bottom,0px));background:var(--glass);-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);border:1px solid var(--line);border-bottom:0;border-radius:28px 28px 0 0;box-shadow:0 -20px 50px -22px rgba(20,24,60,.4)}
+.gate:before{content:"";position:absolute;left:0;right:0;bottom:100%;height:120px;pointer-events:none;background:linear-gradient(to top,var(--bg),transparent)}
+.gate h2{margin:0 0 4px;font-size:23px}
+.gate .two{margin-top:16px}.gate .btn{width:100%;padding:10px 8px}
+.sub-links{display:flex;flex-wrap:wrap;gap:2px 18px;justify-content:center;margin-top:10px;font-size:13.5px}
+.gate.nudge{animation:nudge .5s}
+@keyframes nudge{30%{transform:translateY(-10px)}60%{transform:none}80%{transform:translateY(-4px)}}
+
+/* Auth extras */
+.pw{position:relative}.pw .in{padding-right:70px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--acc);font-weight:600;font-size:13.5px;padding:8px 10px;min-height:38px;cursor:pointer;border-radius:10px}
+.caps{font-size:12.5px;color:var(--warn);margin-top:6px}
+.aux{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px}
+.aux .chk{margin:8px 0}
+.chk{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);margin:10px 0 0;cursor:pointer}
+.chk input{width:19px;height:19px;margin:0;accent-color:var(--acc);flex:none}
+.meter{display:flex;gap:5px;margin:10px 0 4px}.meter i{flex:1;height:5px;border-radius:9px;background:var(--line);transition:background .2s}
+.meter[data-s="1"] i:nth-child(-n+1){background:var(--err)}
+.meter[data-s="2"] i:nth-child(-n+2){background:var(--warn)}
+.meter[data-s="3"] i:nth-child(-n+3){background:var(--ok)}
+.meter[data-s="4"] i{background:var(--ok)}
+.auth form .btn{margin-top:6px}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="logo">Campus<i>ly</i></div>
+<header><div class="logo">Event<i>ra</i></div>
 <div id="who" class="row" style="margin:0;align-items:center"></div></header>
 <main id="app"></main>
 </div>
 <dialog id="tdlg"><form method="dialog" id="tf"><div id="tfb"></div><div class="row" style="justify-content:flex-end"><button type="button" class="btn line" id="tc">Cancel</button><button class="btn">Continue</button></div></form></dialog>
 <dialog id="cdlg"></dialog>
 <dialog id="fdlg"></dialog><dialog id="odlg"></dialog><dialog id="adlg"></dialog><div id="flash"></div>
-<div id="splash"><div class="mark">Campus<i>ly</i></div><div class="sub">Every campus event, one ticket</div></div>
+<div id="splash"><div class="mark">Event<i>ra</i></div><div class="sub">Every campus event, one ticket</div></div>
 <div id="toast" role="status"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
@@ -138,9 +249,10 @@ s.events.push(
 const colName=c=>(S.colleges.find(x=>x.code===c)||{}).name||c;
 let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
 if(!S||!S.events)S=seed2();
+try{if(localStorage.getItem('cl-tmp')&&!sessionStorage.getItem('cl-tmp')&&S.session){S.session=null;localStorage.removeItem('cl-tmp')}}catch(e){}
 S.colleges=S.colleges||[];S.saves=S.saves||{};S.coords=S.coords||[];S.vols=S.vols||[];S.notices=S.notices||[];S.reports=S.reports||[];S.follows=S.follows||{};S.rolls=S.rolls||{};S.qa=S.qa||[];S.team=S.team||[];S.tasks=S.tasks||[];S.spons=S.spons||[];S.audit=S.audit||[];S.prefs=S.prefs||{};S.onb=S.onb||{};S.pref=S.pref||{theme:'auto',big:false};S.friends=S.friends||{};S.rides=S.rides||[];S.members=S.members||[];S.polls=S.polls||[];S.certs=S.certs||{};
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
-const ui={role:'student',tab:'events',club:'All',city:'All',cat:'All',loc:null,q:'',aev:null,mode:'in',pend:null,done:null,aTab:'student'};
+const ui={role:'student',tab:'events',club:'All',city:'All',cat:'All',loc:null,q:'',aev:null,mode:'in',pend:null,done:null,aTab:'student',landing:true};
 const CID={'Student Technical Council':'IITP-STC','Cultural Club':'IITP-CUL','E-Cell':'IITP-ECL','Photo Club':'IITP-PHO','Coding Club':'IITP-COD'};
 const cid=e=>e.clubId||CID[e.club]||'CMP-EVT';
 const log=t=>S.audit.push({text:t,at:Date.now(),by:S.session.id});
@@ -230,7 +342,7 @@ function bindEvent(){
   document.querySelectorAll('[data-reg]').forEach(b=>b.onclick=()=>register(b.dataset.reg));
   document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{ui.tab='tickets';render()});
   document.querySelectorAll('[data-save]').forEach(b=>b.onclick=()=>{toggleSave(b.dataset.save);render()});
-  document.querySelectorAll('[data-share]').forEach(b=>b.onclick=()=>{const e=ev(b.dataset.share),s=e.title+' by '+e.club+' ('+colName(e.college)+'), '+e.date+', '+e.venue+'. Get your ticket on Campusly.';
+  document.querySelectorAll('[data-share]').forEach(b=>b.onclick=()=>{const e=ev(b.dataset.share),s=e.title+' by '+e.club+' ('+colName(e.college)+'), '+e.date+', '+e.venue+'. Get your ticket on Eventra.';
     if(navigator.share)navigator.share({title:e.title,text:s}).catch(()=>{});else{try{navigator.clipboard.writeText(s);toast('Event details copied.')}catch(x){toast('Copying isn’t available here.')}}});
   document.querySelectorAll('[data-rep]').forEach(b=>b.onclick=()=>{const id=b.dataset.rep;if(S.reports.some(x=>x.eventId===id&&x.by===S.session.id))return toast('You already reported this event.');S.reports.push({eventId:id,by:S.session.id,at:Date.now()});save();toast('Reported. The college coordinator will review it.')});
   document.querySelectorAll('[data-ask]').forEach(b=>b.onclick=()=>{const id=b.dataset.ask,v=$('#ask-'+id).value.trim();if(!v)return;S.qa.push({id:'q'+Date.now(),eventId:id,by:S.session.name,text:v,at:Date.now()});save();render()});
@@ -242,8 +354,9 @@ function render(){
   stopScan();
   const se=S.session;
   $('#who').innerHTML=se?`<span class="tag">${esc(se.role==='admin'?se.club+(se.vol?' (volunteer)':''):se.name)}</span><button class="btn line" id="out">Log out</button>`:'';
-  if(!se){$('#app').innerHTML=viewAuth();bindAuth();return}
-  $('#out').onclick=()=>{S.session=null;ui.pend=null;ui.eid=null;save();render()};
+  if(!se){document.body.classList.toggle('landing',!!ui.landing);if(ui.landing){$('#app').innerHTML=viewLanding();bindLanding()}else{$('#app').innerHTML=viewAuth();bindAuth()}return}
+  document.body.classList.remove('landing');
+  $('#out').onclick=()=>{S.session=null;ui.landing=true;ui.pend=null;ui.eid=null;save();render()};
   ui.role=se.role;
   const tabs=TABS[se.vol?'vol':se.role],sub=['other','saved','clubs'];
   if(!tabs.some(t=>t[0]===ui.tab)&&!(se.role==='student'&&sub.includes(ui.tab)))ui.tab=tabs[0][0];
@@ -372,7 +485,8 @@ const RL={student:'Student',admin:'Club',coord:'Coordinator'};
 function viewAuth(){
   const r=ui.aTab,p=ui.pend;let f;
   const who=r==='student'?'student':r==='admin'?'club':'coordinator';
-  if(ui.done)f=`<h1>You’re registered</h1><p class="tag" style="margin:0 0 12px">Your ${who} ID</p>
+  if(ui.pend&&ui.pend.step[0]==='f')f=resetHTML(r);
+  else if(ui.done)f=`<h1>You’re registered</h1><p class="tag" style="margin:0 0 12px">Your ${who} ID</p>
   <div class="idbox">${esc(ui.done)}</div><p class="tag">Save this ID. You’ll log in with it and the password you just set.${ui.wait?' Your college coordinator must approve your club before you can log in.':''}</p>
   <button class="btn" style="width:100%" id="go">Continue to log in</button>`;
   else if(p&&p.step==='otp')f=`<h1>Verify your email</h1><p class="tag" style="margin:0 0 10px">Enter the 6-digit code sent to ${esc(p.email)}.</p>
@@ -385,21 +499,85 @@ function viewAuth(){
   else if(ui.mode==='up')f=`<h1>${r==='student'?'Create student account':r==='admin'?'Register your club':'Register as coordinator'}</h1><p class="tag" style="margin:0 0 6px">We’ll email a code to verify your address.</p>
   <form id="sf">${r==='student'?field('sn','Full name','required')+field('sr','Roll number','required'):r==='admin'?field('cn','Club name','required')+field('cc','Club short code (e.g. TFC)','required maxlength="6"'):field('sn','Full name','required')}
   ${field('sc','College name','required list="cl" placeholder="e.g. IIT Patna" autocomplete="off"')+'<datalist id="cl">'+S.colleges.map(c=>'<option value="'+esc(c.name)+'">').join('')+'</datalist>'}${field('se','Email','type="email" required autocomplete="email"')}
+  <label class="chk"><input type="checkbox" required> I agree to the Terms of Use and Privacy Policy</label>
   <div class="err" id="er"></div>${BTN}Send verification code</button></form>
   <p class="tag" style="text-align:center">Already registered? <button class="link" id="sw">Log in</button></p>`;
   else f=`<h1>Log in</h1><p class="tag" style="margin:0 0 6px">${r==='student'?'Use your student ID.':r==='admin'?'Use your club ID, or a volunteer ID from your club.':'Use your coordinator ID.'}</p>
-  <form id="lf">${field('li',r==='student'?'Student ID':r==='admin'?'Club or volunteer ID':'Coordinator ID','required autocapitalize="characters" autocomplete="username"')}${field('lp','Password','type="password" required autocomplete="current-password"')}
+  <form id="lf">${field('li',r==='student'?'Student ID':r==='admin'?'Club or volunteer ID':'Coordinator ID','required autocapitalize="characters" autocomplete="username" value="'+esc(rid(r))+'"')}${field('lp','Password','type="password" required autocomplete="current-password"')}
+  <div class="aux"><label class="chk"><input type="checkbox" id="rm" ${rid(r)||!rid('seen')?'checked':''}> Remember my ID</label><button type="button" class="link" id="fp">Forgot password?</button></div>
+  <label class="chk"><input type="checkbox" id="kp" checked> Keep me signed in on this device</label>
   <div class="err" id="er"></div>${BTN}Log in</button></form>
+  <p class="tag" style="text-align:center;margin:0 0 6px">Lost your ID? <button class="link" id="fid">Find it by email</button></p>
   <p class="tag" style="text-align:center">New here? <button class="link" id="sw">${r==='student'?'Create account':r==='admin'?'Register your club':'Register as coordinator'}</button></p>`;
-  return `<div class="auth"><div class="seg" style="margin-bottom:22px">${Object.keys(RL).map(k=>`<button data-at="${k}" class="${r===k?'on':''}" style="flex:1">${RL[k]}</button>`).join('')}</div>${f}<p class="tag" style="text-align:center;margin-top:18px"><button class="link" id="ver">Verify a certificate</button></p></div>`;
+  return `<div class="auth">${ui.done?'':'<button class="link" id="bl" style="margin:-6px 0 10px">‹ Back to events</button>'}<div class="seg" style="margin-bottom:22px">${Object.keys(RL).map(k=>`<button data-at="${k}" class="${r===k?'on':''}" style="flex:1">${RL[k]}</button>`).join('')}</div>${f}<p class="tag" style="text-align:center;margin-top:18px"><button class="link" id="ver">Verify a certificate</button></p></div>`;
 }
-function start(se){S.session=se;ui.tab='';ui.aev=null;save();render();if(se.role==='student'&&!S.onb[se.id])onboard()}
+
+/* Guest landing: preview, then gate */
+function viewLanding(){
+  let l=S.events.filter(e=>!e.removed&&!e.unapproved&&!e.cancelled&&days(e.date)>=0).sort((a,b)=>a.date.localeCompare(b.date));
+  if(!l.length)l=S.events.filter(e=>!e.removed&&!e.unapproved);
+  l=l.slice(0,6);
+  const card=e=>{const p=dparts(e.date);return `<article class="card gc">${poster(e)}<div class="bd"><div class="meta" style="margin:0">${esc(e.club)}</div><div style="font-weight:600">${p.d} ${p.m}, ${esc(e.time)}</div><div class="meta" style="margin:0">${esc(e.venue)}, ${esc(colName(e.college))}</div></div></article>`};
+  return `<div class="hero"><h1>Every campus event, one ticket</h1><p>Browse what’s on at your college and others. Register once, show a QR at the gate.</p></div>
+  <h2 style="margin-top:20px">Happening soon</h2>
+  ${l.slice(0,2).map(card).join('')}<div class="veil" aria-hidden="true">${l.slice(2).map(card).join('')}</div><div style="height:280px"></div>
+  <section class="gate" aria-label="Sign in"><h2>Log in to see every event</h2><p class="tag" style="margin:0">Register in a minute and get a QR ticket for any event on your campus.</p>
+  <div class="two"><button class="btn" data-go="student:in">Log in as student</button><button class="btn ghost" data-go="admin:in">Log in as club</button></div>
+  <div class="sub-links"><button class="link" data-go="student:up">Create student account</button><button class="link" data-go="admin:up">Register your club</button><button class="link" data-go="coord:in" style="font-weight:500;color:var(--mute)">Coordinator</button><button class="link" id="ver2" style="font-weight:500;color:var(--mute)">Verify a certificate</button></div></section>`;
+}
+function bindLanding(){
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const[r,m]=b.dataset.go.split(':');ui.aTab=r;ui.mode=m;ui.landing=false;ui.pend=null;ui.done=null;render();scrollTo(0,0)});
+  document.querySelectorAll('.gc').forEach(c=>c.onclick=()=>{const g=$('.gate');g.classList.remove('nudge');void g.offsetWidth;g.classList.add('nudge')});
+  $('#ver2').onclick=verifyDlg;
+}
+const rid=r=>{try{return localStorage.getItem('cl-rid-'+r)||''}catch(e){return''}};
+function resetHTML(r){
+  const p=ui.pend,idl=r==='student'?'Student ID':r==='admin'?'Club ID':'Coordinator ID',back='<p class="tag" style="text-align:center;margin-top:14px"><button class="link" id="back">Back to log in</button></p>';
+  if(p.step==='fp')return `<h1>Reset your password</h1><p class="tag" style="margin:0 0 6px">Enter your ${idl} and the email you signed up with. We’ll send a code.${r==='admin'?' Volunteers: ask your club to reset it.':''}</p><form id="rf">${field('ri',idl,'required autocapitalize="characters"')}${field('re','Email','type="email" required autocomplete="email"')}<div class="err" id="er"></div>${BTN}Send reset code</button></form>${back}`;
+  if(p.step==='fpo')return `<h1>Enter the reset code</h1><p class="tag" style="margin:0 0 6px">We sent a 6-digit code to the email on this account.</p><form id="ro">${field('oc','Reset code','inputmode="numeric" maxlength="6" required autocomplete="one-time-code"')}<div class="err" id="er"></div>${BTN}Continue</button></form><div class="note">Demo mode: no email is sent, so your code is <b>${p.otp}</b>. The live app emails it.</div>${back}`;
+  if(p.step==='fpw')return `<h1>Choose a new password</h1><p class="tag" style="margin:0 0 6px">Use at least 6 characters.</p><form id="rw">${field('p1','New password','type="password" required minlength="6" autocomplete="new-password"')}${field('p2','Confirm new password','type="password" required minlength="6" autocomplete="new-password"')}<div class="err" id="er"></div>${BTN}Save new password</button></form>`;
+  if(p.found)return `<h1>Your ${idl}</h1><p class="tag" style="margin:0 0 12px">Use ${p.found.length>1?'one of these':'this'} to log in.</p>${p.found.map(i=>`<div class="idbox">${esc(i)}</div>`).join('')}<div class="note">Demo mode: the live app emails this to you instead of showing it here.</div>${back}`;
+  return `<h1>Find your ID</h1><p class="tag" style="margin:0 0 6px">Enter the email you signed up with.</p><form id="fi">${field('fe','Email','type="email" required autocomplete="email"')}<div class="err" id="er"></div>${BTN}Show my ID</button></form>${back}`;
+}
+const acct=(r,id)=>r==='student'?S.users.find(x=>x.id===id):r==='admin'?S.clubs.find(x=>x.id===id):S.coords.find(x=>x.id===id);
+function enhancePw(){
+  document.querySelectorAll('input[type=password]').forEach(i=>{
+    const w=document.createElement('div');w.className='pw';i.before(w);w.append(i);
+    const b=document.createElement('button');b.type='button';b.className='eye';b.textContent='Show';b.setAttribute('aria-label','Show password');
+    b.onclick=()=>{const h=i.type==='password';i.type=h?'text':'password';b.textContent=h?'Hide':'Show';b.setAttribute('aria-label',h?'Hide password':'Show password')};
+    w.append(b);
+    const c=document.createElement('div');c.className='caps';c.hidden=true;c.textContent='Caps Lock is on.';w.after(c);
+    const k=e=>{c.hidden=!(e.getModifierState&&e.getModifierState('CapsLock'))};i.addEventListener('keydown',k);i.addEventListener('keyup',k);i.addEventListener('blur',()=>{c.hidden=true});
+  });
+  const p1=$('#p1');if(p1){
+    const m=document.createElement('div');m.innerHTML='<div class="meter" data-s="0"><i></i><i></i><i></i><i></i></div><div class="tag" id="ml">Tip: 8+ characters with upper and lower case, a number or a symbol.</div>';
+    p1.closest('.pw').nextElementSibling.after(m);
+    p1.addEventListener('input',()=>{const v=p1.value,n=v?Math.max(1,(v.length>=8)+(/[a-z]/.test(v)&&/[A-Z]/.test(v))+/\d/.test(v)+/[^A-Za-z0-9]/.test(v)):0;m.firstChild.dataset.s=n;$('#ml').textContent=n?['','Weak','Fair','Good','Strong'][n]:'Tip: 8+ characters with upper and lower case, a number or a symbol.'});
+  }
+}
+function start(se){
+  try{const rm=$('#rm'),li=$('#li'),kp=$('#kp');
+    if(rm&&li){localStorage.setItem('cl-rid-seen','1');rm.checked?localStorage.setItem('cl-rid-'+ui.aTab,li.value.trim().toUpperCase()):localStorage.removeItem('cl-rid-'+ui.aTab)}
+    if(kp){if(kp.checked){localStorage.removeItem('cl-tmp');sessionStorage.removeItem('cl-tmp')}else{localStorage.setItem('cl-tmp','1');sessionStorage.setItem('cl-tmp','1')}}}catch(e){}S.session=se;ui.tab='';ui.aev=null;save();render();if(se.role==='student'&&!S.onb[se.id])onboard()}
 function bindAuth(){
   document.querySelectorAll('[data-at]').forEach(b=>b.onclick=()=>{ui.aTab=b.dataset.at;ui.pend=null;ui.done=null;ui.wait=false;render()});
   const er=m=>{$('#er').textContent=m},val=id=>$('#'+id).value.trim();
   if($('#ver'))$('#ver').onclick=verifyDlg;
+  if($('#bl'))$('#bl').onclick=()=>{ui.landing=true;ui.pend=null;render();scrollTo(0,0)};
   if($('#sw'))$('#sw').onclick=()=>{ui.mode=ui.mode==='up'?'in':'up';render()};
   if($('#back'))$('#back').onclick=()=>{ui.pend=null;render()};
+  enhancePw();
+  if($('#fp'))$('#fp').onclick=()=>{ui.pend={step:'fp'};render()};
+  if($('#fid'))$('#fid').onclick=()=>{ui.pend={step:'fid'};render()};
+  if($('#rf'))$('#rf').onsubmit=e=>{e.preventDefault();const a=acct(ui.aTab,val('ri').toUpperCase());
+    if(!a||(a.email||'').toLowerCase()!==val('re').toLowerCase())return er('We couldn’t find an account with that ID and email.');
+    ui.pend={step:'fpo',id:a.id,otp:String(Math.floor(100000+Math.random()*900000))};render()};
+  if($('#ro'))$('#ro').onsubmit=e=>{e.preventDefault();if(val('oc')!==ui.pend.otp)return er('That code doesn’t match. Check it and try again.');ui.pend.step='fpw';render()};
+  if($('#rw'))$('#rw').onsubmit=async e=>{e.preventDefault();
+    if($('#p1').value!==$('#p2').value)return er('The two passwords don’t match.');
+    const a=acct(ui.aTab,ui.pend.id);a.ph=await hash($('#p1').value);save();ui.pend=null;render();toast('Password updated. Log in with your new password.')};
+  if($('#fi'))$('#fi').onsubmit=e=>{e.preventDefault();const em=val('fe').toLowerCase(),r=ui.aTab,l=(r==='student'?S.users:r==='admin'?S.clubs:S.coords).filter(x=>(x.email||'').toLowerCase()===em).map(x=>x.id);
+    if(!l.length)return er('No account uses that email.');ui.pend={step:'fid',found:l};render()};
   if($('#go'))$('#go').onclick=()=>{ui.mode='in';ui.done=null;ui.wait=false;render()};
   if($('#sf'))$('#sf').onsubmit=e=>{e.preventDefault();
     const r=ui.aTab,email=val('se').toLowerCase(),college=collegeCode(val('sc'));
@@ -475,9 +653,9 @@ function viewTickets(){
 }
 function cert(code){
   const r=S.regs.find(x=>x.code===code),e=ev(r.eventId),p=dparts(e.date),ct=S.certs[cid(e)]||{};
-  $('#cdlg').innerHTML=`<div style="text-align:center;padding:10px 4px"><div class="logo">Campus<i>ly</i></div><p class="tag" style="margin:14px 0 4px">${esc(ct.title||'Certificate of participation')}</p>
+  $('#cdlg').innerHTML=`<div style="text-align:center;padding:10px 4px"><div class="logo">Event<i>ra</i></div><p class="tag" style="margin:14px 0 4px">${esc(ct.title||'Certificate of participation')}</p>
   <h1 style="margin:0 0 6px">${esc(r.name)}</h1><p style="margin:0 0 14px">${esc(r.roll)}, ${esc(colName(S.session.college))}</p>
-  <p style="margin:0">took part in <b>${esc(e.title)}</b></p><p class="tag" style="margin:4px 0 14px">organised by ${esc(e.club)}, ${esc(colName(e.college))}<br>on ${p.d} ${p.m} ${e.date.slice(0,4)}</p>${ct.signer?'<p style="margin:0 0 10px">'+esc(ct.signer)+'<br><span class="tag">'+esc(ct.role||'')+'</span></p>':''}<div class="code">${esc(r.code)}</div><p class="tag" style="margin-top:6px">Verify this code on the Campusly login page.</p></div>
+  <p style="margin:0">took part in <b>${esc(e.title)}</b></p><p class="tag" style="margin:4px 0 14px">organised by ${esc(e.club)}, ${esc(colName(e.college))}<br>on ${p.d} ${p.m} ${e.date.slice(0,4)}</p>${ct.signer?'<p style="margin:0 0 10px">'+esc(ct.signer)+'<br><span class="tag">'+esc(ct.role||'')+'</span></p>':''}<div class="code">${esc(r.code)}</div><p class="tag" style="margin-top:6px">Verify this code on the Eventra login page.</p></div>
   <div class="row" style="justify-content:flex-end"><button class="btn line" id="cx">Close</button><button class="btn" id="cp">Print or save PDF</button></div>`;
   $('#cdlg').showModal();$('#cx').onclick=()=>$('#cdlg').close();
   $('#cp').onclick=()=>{try{window.print()}catch(x){toast('Printing is blocked here. Take a screenshot instead.')}};
