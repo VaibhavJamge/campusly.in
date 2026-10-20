@@ -232,10 +232,20 @@ dialog::backdrop{background:rgba(10,12,30,.5);-webkit-backdrop-filter:blur(6px);
 <div id="toast" role="status"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* Supabase: URL + publishable key are public by design; RLS protects the data. Never put a secret key here. */
+const sb=supabase.createClient('https://hwbqcsljvkkjcyybztzs.supabase.co','sb_publishable_n2n8fXPuVQp2USqoyA70YA_xEK2s1GL');
+const fromEv=e=>({...e,desc:e.descr,clubId:e.club_id,how:e.how_to});
+async function loadAll(){
+  const [c,e,r]=await Promise.all([sb.from('colleges').select('*'),sb.from('events').select('*'),sb.from('registrations').select('*')]);
+  if(c.error||e.error||r.error){console.error(c.error||e.error||r.error);return false}
+  S.colleges=c.data;S.events=e.data.map(fromEv);S.regs=r.data;return true;
+}
+</script>
 <script>
 const K='campusly-v7';
-const DEMOH='29d1281934b777f0aa3256eba7886479dfab1d2637927b73f6657344a0ea59b0';
-const seed=()=>({users:[{id:'IITP-STU-DEMO1',email:'demo@student.test',name:'Demo Student',roll:'DEMO001',college:'IITP',ph:DEMOH}],clubs:[{id:'IITP-STC',club:'Student Technical Council',college:'IITP',email:'demo@club.test',ph:DEMOH,approved:true}],coords:[{id:'IITP-COORD',college:'IITP',name:'Demo Coordinator',email:'demo@coord.test',ph:DEMOH}],colleges:[{name:'IIT Patna',code:'IITP',lat:25.535,lng:84.852},{name:'NIT Patna',code:'NITP',lat:25.621,lng:85.171},{name:'BIT Mesra',code:'BITM',lat:23.412,lng:85.440}],session:null,regs:[],events:[
+const seed=()=>({users:[{id:'IITP-STU-DEMO1',email:'demo@student.test',name:'Demo Student',roll:'DEMO001',college:'IITP'}],clubs:[{id:'IITP-STC',club:'Student Technical Council',college:'IITP',email:'demo@club.test',approved:true}],coords:[{id:'IITP-COORD',college:'IITP',name:'Demo Coordinator',email:'demo@coord.test'}],colleges:[{name:'IIT Patna',code:'IITP',lat:25.535,lng:84.852},{name:'NIT Patna',code:'NITP',lat:25.621,lng:85.171},{name:'BIT Mesra',code:'BITM',lat:23.412,lng:85.440}],session:null,regs:[],events:[
 {id:'e1',title:'Xenith Tech Fest',club:'Student Technical Council',date:'2026-12-12',time:'10:00 AM',venue:'Main Auditorium',cap:300,desc:'Talks, hackathon finals and a startup expo. Open to every programme.'},
 {id:'e2',title:'Open Mic Night',club:'Cultural Club',date:'2026-11-07',time:'6:30 PM',venue:'Amphitheatre',cap:120,desc:'Poetry, music, stand-up. Sign up to perform at the door.'},
 {id:'e3',title:'Startup Pitch Day',club:'E-Cell',date:'2026-11-14',time:'2:00 PM',venue:'Seminar Hall 2',cap:80,desc:'Five student teams pitch to alumni founders. Feedback round after.'},
@@ -356,7 +366,7 @@ function render(){
   $('#who').innerHTML=se?`<span class="tag">${esc(se.role==='admin'?se.club+(se.vol?' (volunteer)':''):se.name)}</span><button class="btn line" id="out">Log out</button>`:'';
   if(!se){document.body.classList.toggle('landing',!!ui.landing);if(ui.landing){$('#app').innerHTML=viewLanding();bindLanding()}else{$('#app').innerHTML=viewAuth();bindAuth()}return}
   document.body.classList.remove('landing');
-  $('#out').onclick=()=>{S.session=null;ui.landing=true;ui.pend=null;ui.eid=null;save();render()};
+  $('#out').onclick=()=>{sb.auth.signOut();S.session=null;ui.landing=true;ui.pend=null;ui.eid=null;save();render()};
   ui.role=se.role;
   const tabs=TABS[se.vol?'vol':se.role],sub=['other','saved','clubs'];
   if(!tabs.some(t=>t[0]===ui.tab)&&!(se.role==='student'&&sub.includes(ui.tab)))ui.tab=tabs[0][0];
@@ -486,8 +496,8 @@ function viewAuth(){
   const r=ui.aTab,p=ui.pend;let f;
   const who=r==='student'?'student':r==='admin'?'club':'coordinator';
   if(ui.pend&&ui.pend.step[0]==='f')f=resetHTML(r);
-  else if(ui.done)f=`<h1>You’re registered</h1><p class="tag" style="margin:0 0 12px">Your ${who} ID</p>
-  <div class="idbox">${esc(ui.done)}</div><p class="tag">Save this ID. You’ll log in with it and the password you just set.${ui.wait?' Your college coordinator must approve your club before you can log in.':''}</p>
+  else if(ui.done)f=`<h1>Check your email</h1><p class="tag" style="margin:0 0 12px">We sent a confirmation link to</p>
+  <div class="idbox">${esc(ui.done)}</div><p class="tag">Click the link, then log in with this email and your password. Your ID appears after you log in.${ui.wait?' Your college coordinator must approve your club before you can log in.':''}</p>
   <button class="btn" style="width:100%" id="go">Continue to log in</button>`;
   else if(p&&p.step==='otp')f=`<h1>Verify your email</h1><p class="tag" style="margin:0 0 10px">Enter the 6-digit code sent to ${esc(p.email)}.</p>
   <form id="of">${field('oc','Verification code','inputmode="numeric" maxlength="6" required autocomplete="one-time-code"')}<div class="err" id="er"></div>${BTN}Verify email</button></form>
@@ -503,7 +513,7 @@ function viewAuth(){
   <div class="err" id="er"></div>${BTN}Send verification code</button></form>
   <p class="tag" style="text-align:center">Already registered? <button class="link" id="sw">Log in</button></p>`;
   else f=`<h1>Log in</h1><p class="tag" style="margin:0 0 6px">${r==='student'?'Use your student ID.':r==='admin'?'Use your club ID, or a volunteer ID from your club.':'Use your coordinator ID.'}</p>
-  <form id="lf">${field('li',r==='student'?'Student ID':r==='admin'?'Club or volunteer ID':'Coordinator ID','required autocapitalize="characters" autocomplete="username" value="'+esc(rid(r))+'"')}${field('lp','Password','type="password" required autocomplete="current-password"')}
+  <form id="lf">${field('li','Email','type="email" required autocomplete="username" value="'+esc(rid(r))+'"')}${field('lp','Password','type="password" required autocomplete="current-password"')}
   <div class="aux"><label class="chk"><input type="checkbox" id="rm" ${rid(r)||!rid('seen')?'checked':''}> Remember my ID</label><button type="button" class="link" id="fp">Forgot password?</button></div>
   <label class="chk"><input type="checkbox" id="kp" checked> Keep me signed in on this device</label>
   <div class="err" id="er"></div>${BTN}Log in</button></form>
@@ -533,7 +543,7 @@ function bindLanding(){
 const rid=r=>{try{return localStorage.getItem('cl-rid-'+r)||''}catch(e){return''}};
 function resetHTML(r){
   const p=ui.pend,idl=r==='student'?'Student ID':r==='admin'?'Club ID':'Coordinator ID',back='<p class="tag" style="text-align:center;margin-top:14px"><button class="link" id="back">Back to log in</button></p>';
-  if(p.step==='fp')return `<h1>Reset your password</h1><p class="tag" style="margin:0 0 6px">Enter your ${idl} and the email you signed up with. We’ll send a code.${r==='admin'?' Volunteers: ask your club to reset it.':''}</p><form id="rf">${field('ri',idl,'required autocapitalize="characters"')}${field('re','Email','type="email" required autocomplete="email"')}<div class="err" id="er"></div>${BTN}Send reset code</button></form>${back}`;
+  if(p.step==='fp')return `<h1>Reset your password</h1><p class="tag" style="margin:0 0 6px">Enter the email you signed up with. We’ll send a reset link.${r==='admin'?' Volunteers: ask your club to reset it.':''}</p><form id="rf">${field('re','Email','type="email" required autocomplete="email"')}<div class="err" id="er"></div>${BTN}Send reset link</button></form>${back}`;
   if(p.step==='fpo')return `<h1>Enter the reset code</h1><p class="tag" style="margin:0 0 6px">We sent a 6-digit code to the email on this account.</p><form id="ro">${field('oc','Reset code','inputmode="numeric" maxlength="6" required autocomplete="one-time-code"')}<div class="err" id="er"></div>${BTN}Continue</button></form><div class="note">Demo mode: no email is sent, so your code is <b>${p.otp}</b>. The live app emails it.</div>${back}`;
   if(p.step==='fpw')return `<h1>Choose a new password</h1><p class="tag" style="margin:0 0 6px">Use at least 6 characters.</p><form id="rw">${field('p1','New password','type="password" required minlength="6" autocomplete="new-password"')}${field('p2','Confirm new password','type="password" required minlength="6" autocomplete="new-password"')}<div class="err" id="er"></div>${BTN}Save new password</button></form>`;
   if(p.found)return `<h1>Your ${idl}</h1><p class="tag" style="margin:0 0 12px">Use ${p.found.length>1?'one of these':'this'} to log in.</p>${p.found.map(i=>`<div class="idbox">${esc(i)}</div>`).join('')}<div class="note">Demo mode: the live app emails this to you instead of showing it here.</div>${back}`;
@@ -569,13 +579,15 @@ function bindAuth(){
   enhancePw();
   if($('#fp'))$('#fp').onclick=()=>{ui.pend={step:'fp'};render()};
   if($('#fid'))$('#fid').onclick=()=>{ui.pend={step:'fid'};render()};
-  if($('#rf'))$('#rf').onsubmit=e=>{e.preventDefault();const a=acct(ui.aTab,val('ri').toUpperCase());
-    if(!a||(a.email||'').toLowerCase()!==val('re').toLowerCase())return er('We couldn’t find an account with that ID and email.');
-    ui.pend={step:'fpo',id:a.id,otp:String(Math.floor(100000+Math.random()*900000))};render()};
-  if($('#ro'))$('#ro').onsubmit=e=>{e.preventDefault();if(val('oc')!==ui.pend.otp)return er('That code doesn’t match. Check it and try again.');ui.pend.step='fpw';render()};
+  if($('#rf'))$('#rf').onsubmit=async e=>{e.preventDefault();
+    const {error}=await sb.auth.resetPasswordForEmail(val('re').toLowerCase(),{redirectTo:location.href.split('#')[0]});
+    if(error)return er(error.message);
+    ui.pend=null;render();toast('If that email has an account, a reset link is on its way.')};
   if($('#rw'))$('#rw').onsubmit=async e=>{e.preventDefault();
     if($('#p1').value!==$('#p2').value)return er('The two passwords don’t match.');
-    const a=acct(ui.aTab,ui.pend.id);a.ph=await hash($('#p1').value);save();ui.pend=null;render();toast('Password updated. Log in with your new password.')};
+    const {error}=await sb.auth.updateUser({password:$('#p1').value});
+    if(error)return er(error.message);
+    await sb.auth.signOut();S.session=null;ui.pend=null;ui.mode='in';save();render();toast('Password updated. Log in with your new password.')};
   if($('#fi'))$('#fi').onsubmit=e=>{e.preventDefault();const em=val('fe').toLowerCase(),r=ui.aTab,l=(r==='student'?S.users:r==='admin'?S.clubs:S.coords).filter(x=>(x.email||'').toLowerCase()===em).map(x=>x.id);
     if(!l.length)return er('No account uses that email.');ui.pend={step:'fid',found:l};render()};
   if($('#go'))$('#go').onclick=()=>{ui.mode='in';ui.done=null;ui.wait=false;render()};
@@ -598,38 +610,33 @@ function bindAuth(){
       d.id=college+'-COORD';d.name=val('sn');
       if(S.coords.some(c=>c.college===college))return er('This college already has a coordinator.');
     }
-    ui.pend=d;render()};
+    d.step='pw';ui.pend=d;render()};
   if($('#of'))$('#of').onsubmit=e=>{e.preventDefault();
     if(val('oc')!==ui.pend.otp)return er('That code doesn’t match. Check it and try again.');
     ui.pend.step='pw';render()};
   if($('#pf'))$('#pf').onsubmit=async e=>{e.preventDefault();
     if($('#p1').value!==$('#p2').value)return er('The two passwords don’t match.');
-    const p=ui.pend,ph=await hash($('#p1').value),r=ui.aTab;
-    if(!S.colleges.some(c=>c.code===p.college))S.colleges.push({name:p.collegeName,code:p.college});
-    if(r==='student'){
-      let id;do{id=p.college+'-STU-'+rnd(5)}while(S.users.some(u=>u.id===id));
-      S.users.push({id,email:p.email,name:p.name,roll:p.roll,college:p.college,ph});ui.done=id;
-    }else if(r==='admin'){
-      const approved=!S.coords.some(c=>c.college===p.college);
-      S.clubs.push({id:p.id,club:p.club,college:p.college,email:p.email,ph,approved});ui.done=p.id;ui.wait=!approved;
-    }else{S.coords.push({id:p.id,college:p.college,name:p.name,email:p.email,ph});ui.done=p.id}
-    ui.pend=null;save();render()};
+    const p=ui.pend,r=ui.aTab;
+    if(r==='coord')return er('Coordinator accounts are created by the Eventra team. Contact us to get yours.');
+    const code=r==='admin'?p.id.split('-')[1]:null;
+    const {error}=await sb.auth.signUp({email:p.email,password:$('#p1').value,options:{emailRedirectTo:location.href.split('#')[0],
+      data:{role:r==='admin'?'admin':'student',name:p.name||'',roll:p.roll||'',club:p.club||'',club_code:code,college:p.college}}});
+    if(error)return er(error.message);
+    ui.done=p.email;ui.wait=r==='admin';ui.pend=null;render()};
   if($('#lf'))$('#lf').onsubmit=async e=>{e.preventDefault();
-    const id=val('li').toUpperCase(),ph=await hash($('#lp').value),r=ui.aTab;
-    if(r==='student'){
-      const u=S.users.find(x=>x.id===id);
-      if(!u||u.ph!==ph)return er('ID or password is incorrect.');
-      start({role:'student',id:u.id,name:u.name,roll:u.roll,college:u.college});
-    }else if(r==='admin'){
-      const c=S.clubs.find(x=>x.id===id),v=S.vols.find(x=>x.id===id),a=c||(v&&S.clubs.find(x=>x.id===v.clubId));
-      if(!a||(c||v).ph!==ph)return er('ID or password is incorrect.');
-      if(!a.approved)return er('Your club is waiting for your college coordinator’s approval.');
-      start({role:'admin',id:a.id,club:a.club,college:a.college,vol:!c});
-    }else{
-      const c=S.coords.find(x=>x.id===id);
-      if(!c||c.ph!==ph)return er('ID or password is incorrect.');
-      start({role:'coord',id:c.id,name:c.name,college:c.college});
-    }};
+    const r=ui.aTab;
+    const {data,error}=await sb.auth.signInWithPassword({email:val('li').toLowerCase(),password:$('#lp').value});
+    if(error)return er(/confirm/i.test(error.message)?'Confirm your email first. Check your inbox for the link.':'Email or password is incorrect.');
+    const {data:pr}=await sb.from('profiles').select('*').eq('id',data.user.id).single();
+    if(!pr||pr.role!==r){await sb.auth.signOut();return er('This account isn’t a '+RL[r].toLowerCase()+' account. Use the right tab.')}
+    if(pr.role==='admin'&&!pr.approved){await sb.auth.signOut();return er('Your club is waiting for your college coordinator’s approval.')}
+    const em=data.user.email;
+    if(r==='student'){if(!S.users.some(u=>u.id===pr.public_id))S.users.push({id:pr.public_id,email:em,name:pr.name,roll:pr.roll,college:pr.college});
+      start({role:'student',id:pr.public_id,name:pr.name,roll:pr.roll,college:pr.college,sb:1})}
+    else if(r==='admin'){if(!S.clubs.some(c=>c.id===pr.public_id))S.clubs.push({id:pr.public_id,club:pr.club,college:pr.college,email:em,approved:true});
+      start({role:'admin',id:pr.public_id,club:pr.club,college:pr.college,vol:false,sb:1})}
+    else{if(!S.coords.some(c=>c.id===pr.public_id))S.coords.push({id:pr.public_id,college:pr.college,name:pr.name,email:em});
+      start({role:'coord',id:pr.public_id,name:pr.name,college:pr.college,sb:1})}};
 }
 
 /* Student: tickets */
@@ -930,6 +937,8 @@ function bindReview(){
   $('#sr2').onclick=()=>{S.rolls[col]=$('#rolls').value.split('\n').map(s=>s.trim().toUpperCase()).filter(Boolean);save();toast('Saved '+S.rolls[col].length+' roll numbers.')};
 }
 
+sb.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY'){ui.landing=false;ui.mode='in';ui.pend={step:'fpw'};render()}});
+sb.auth.getSession().then(({data})=>{if(S.session&&S.session.sb&&!data.session){S.session=null;save();render()}});
 applyUI();
 render();
 setTimeout(()=>$('#splash').classList.add('hide'),1900);
